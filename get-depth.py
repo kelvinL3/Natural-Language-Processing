@@ -15,3 +15,11 @@ def get_depth(sentence):
 
         max_depth = max(depth, max_depth)
     return max_depth
+
+def get_average_depth(lyrics):
+    sentences = lyrics.split("\n")
+    sum = 0
+    for s in sentences:
+        sum += get_depth(s)
+    
+    return sum / len(sentences)
