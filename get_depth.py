@@ -3,7 +3,7 @@ from stanfordcorenlp import StanfordCoreNLP
 server = StanfordCoreNLP('http://localhost', 9000)
 
 def get_depth(sentence):
-    parse = server.parse(sys.argv[1])
+    parse = server.parse(sentence)
 
     depth = 0
     max_depth = 0
