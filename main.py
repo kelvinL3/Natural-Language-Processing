@@ -32,11 +32,12 @@ with open("lyrics.csv") as lyrics:
         ner = np.array(named_entity_recognition(line[-1]))
         emb = np.array(get_word_embeddings(gensim.utils.simple_preprocess(line[-1])))
         lgt = np.array([length_of_document(line[-1])])
-        dep = np.array([get_average_depth(line[-1])])
-        combined = np.append(ner, np.append(emb, np.append(lgt, dep)))
+        #dep = np.array([get_average_depth(line[-1])])
+        combined = np.append(ner, np.append(emb, lgt))
         X.append(combined)
         i += 1
-        print(i)
+        if i % 100 == 0:
+            print(i)
     X = np.array(X)
     Y = np.array(Y)
     np.save("X", X)
