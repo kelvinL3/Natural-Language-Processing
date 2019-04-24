@@ -1,7 +1,8 @@
-from feature_NER import named_entity_recognition
-from word_embeddings import get_word_embeddings
-from lengthOfDocument import length_of_document
-from get_depth import get_average_depth
+# from feature_NER import named_entity_recognition
+# from word_embeddings import get_word_embeddings
+# from lengthOfDocument import length_of_document
+# from get_depth import get_average_depth
+from feature_compression import compress
 import gensim
 import numpy as np
 import csv
@@ -32,8 +33,10 @@ with open("lyrics.csv") as lyrics:
         ner = np.array(named_entity_recognition(line[-1]))
         emb = np.array(get_word_embeddings(gensim.utils.simple_preprocess(line[-1])))
         lgt = np.array([length_of_document(line[-1])])
-        #dep = np.array([get_average_depth(line[-1])])
-        combined = np.append(ner, np.append(emb, lgt))
+        dep = np.array([get_average_depth(line[-1])])
+        cps = np.array(compress(line[-1]))
+        combined = np.append(ner, np.append(emb, np.append(lgt, cps)))
+        
         X.append(combined)
         i += 1
         if i % 100 == 0:
