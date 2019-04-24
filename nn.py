@@ -25,6 +25,7 @@ def split():
     X = np.load("X.npy")
     y = np.load("Y.npy")
     X_train, X_test, y_train, y_test = train_test_split(X, y)
+    print("Splitting Testing and Training Data ")
     print(X_train.shape)
     print(X_test.shape)
     print(y_train.shape)
@@ -86,7 +87,7 @@ def test():
             sum += 1
     print(sum/len(predictions))
 
-if option == 1:
+if option == 1: # no extra arguments
     print("test")
     test()
 else:

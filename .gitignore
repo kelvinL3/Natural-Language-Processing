@@ -4,3 +4,4 @@ stanford-corenlp-full-2018-10-05
 lyrics.csv
 *.npy
 __pycache__/
+lyrics_clean.csv
