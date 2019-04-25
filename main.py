@@ -42,9 +42,6 @@ with open("lyrics_clean.csv") as lyrics:
             continue
         
         Y.append(GENRES.get(line[4]))
-        dep = np.array([get_average_depth(line[-1], nlp)])
-        print(dep)
-        combined = dep
         ner = np.array(named_entity_recognition(line[-1]))
         emb = np.array(get_word_embeddings(gensim.utils.simple_preprocess(line[-1])))
         lgt = np.array([length_of_document(line[-1])])
