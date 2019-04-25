@@ -4,7 +4,7 @@ import time
 nlp = None
 
 def fill(ptr, visited):
-    print("ptr = {}".format(ptr))
+    # print("ptr = {}".format(ptr))
     
     # if this is the root, then the head points to itself
     if ptr.head == ptr:
@@ -26,20 +26,20 @@ def fill(ptr, visited):
 def get_depth(sentence):
     global nlp
     
-    timeA = time.time() 
+    # timeA = time.time() 
     
     doc = nlp(sentence)
     
-    for token in doc:
-        print(token.text, token.dep_, token.head.text, token.head.pos_,
-            [child for child in token.children])
+    # for token in doc:
+    #     print(token.text, token.dep_, token.head.text, token.head.pos_,
+    #         [child for child in token.children])
 
     visited = {}
     max_depth = 0
 
-    print("start")
+    # print("start")
     for token in doc:
-        print(token)
+        # print(token)
         if token.text in visited:
             continue
         
@@ -47,17 +47,22 @@ def get_depth(sentence):
         if depth > max_depth:
             max_depth = depth
 
-        print("token {} at depth {}".format(token.text, depth))
+        # print("token {} at depth {}".format(token.text, depth))
     
-    elapsed = time.time() - timeA
-    print("Time taken {}".format(elapsed))
+    # elapsed = time.time() - timeA
+    # print("Time taken {}".format(elapsed))
     return max_depth
 
 
-def get_average_depth(lyrics):
+def get_average_depth(lyrics, nlp_given=None):
     global nlp
-    
-    nlp = spacy.load("en_core_web_sm")
+
+
+    if nlp_given != None:    
+        nlp = nlp_given
+    else:
+        print("inefficient")
+        nlp = spacy.load("en_core_web_sm")
     
     sentences = lyrics.split("\n")
     sum = 0

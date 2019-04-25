@@ -5,3 +5,4 @@ lyrics.csv
 *.npy
 __pycache__/
 lyrics_clean.csv
+sftp-config.json

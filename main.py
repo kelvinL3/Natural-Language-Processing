@@ -7,6 +7,8 @@ import gensim
 import numpy as np
 import csv
 
+import spacy
+
 GENRES = {
     'Metal': 1,
     'Hip-Hop': 2,
@@ -28,6 +30,7 @@ with open("lyrics_clean.csv") as lyrics:
     i = 0
     num_ignored = 0
     uncategorized = {}
+    nlp = spacy.load("en_core_web_sm")
     print("start")
     for line in reader:
         
@@ -39,14 +42,16 @@ with open("lyrics_clean.csv") as lyrics:
             continue
         
         Y.append(GENRES.get(line[4]))
-        
+        dep = np.array([get_average_depth(line[-1], nlp)])
+        print(dep)
+        combined = dep
         ner = np.array(named_entity_recognition(line[-1]))
         emb = np.array(get_word_embeddings(gensim.utils.simple_preprocess(line[-1])))
         lgt = np.array([length_of_document(line[-1])])
-        # dep = np.array([get_average_depth(line[-1])])
-        cps = np.array(compress(line[-1]))
-        combined = np.append(ner, np.append(emb, np.append(lgt, cps)))
-        
+        dep = np.array([get_average_depth(line[-1], nlp)])
+        cpr = np.array(compress(line[-1]))
+        combined = np.append(ner, np.append(emb, np.append(lgt, np.append(dep, cpr))))
+
         X.append(combined)
         i += 1
         if i % 100 == 0:
