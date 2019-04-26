@@ -75,7 +75,7 @@ def test():
         except FileNotFoundError:
             if not (X_train and X_test and y_train and y_test):
                 split()
-        if not (X_train and X_test and y_train and y_test):
+        if not (X_train != None and X_test != None and y_train != None and y_test != None):
             print("X_train, X_test, y_train, and y_test do not exist")
             exit()
     
@@ -87,12 +87,13 @@ def test():
             sum += 1
     print(sum/len(predictions))
 
-if option == 1: # no extra arguments
-    print("test")
-    test()
-else:
-    print("train and test")
-    train()
-    test()
+if __name__ == "__main__":
+    if option == 1: # no extra arguments
+        print("test")
+        test()
+    else:
+        print("train and test")
+        train()
+        test()
 
-print("done")
+    print("done")
