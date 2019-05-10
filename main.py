@@ -45,17 +45,22 @@ with open("lyrics_clean.csv") as lyrics:
         ner = np.array(named_entity_recognition(line[-1]))
         emb = np.array(get_word_embeddings(gensim.utils.simple_preprocess(line[-1])))
         lgt = np.array([length_of_document(line[-1])])
-        dep = np.array([get_average_depth(line[-1], nlp)])
+        # dep = np.array([get_average_depth(line[-1], nlp)])
         cpr = np.array(compress(line[-1]))
-        combined = np.append(ner, np.append(emb, np.append(lgt, np.append(dep, cpr))))
-
+        # print(cpr)
+        combined = np.append(ner, np.append(emb, np.append(lgt, cpr)))
+        # combined = np.append(ner, np.append(emb, lgt))
+        print("ner={} emb={} lgt={} cpr={}".format(ner.shape, emb.shape, lgt.shape, cpr.shape))
+        # print(combined)
+        # print(combined[len(combined)-1])
         X.append(combined)
         i += 1
-        if i % 100 == 0:
+        if i % 10 == 0:
+            exit()
             print(i)
     X = np.array(X)
     Y = np.array(Y)
-    np.save("X", X)
-    np.save("Y", Y)
+    np.save("X1", X)
+    np.save("Y1", Y)
     
     print("ignored {} entries, {}".format(num_ignored, uncategorized))
