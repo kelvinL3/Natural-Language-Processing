@@ -35,21 +35,43 @@ def split():
     np.save("y_train", y_train)
     np.save("y_test", y_test)
 
-def train():
+def load(include):
+    print(include)
+    
+    global X_train
+    global X_test
+    global y_train
+    global y_test
+
+    X_train = np.load("X_train.npy")
+    X_test = np.load("X_test.npy")
+    y_train = np.load("y_train.npy")
+    y_test = np.load("y_test.npy")
+
+    include = [x + len(X_train[0]) - 4 for x in include]
+    X_train = np.delete(X_train, include, 1)
+    X_test = np.delete(X_test, include, 1)
+    print(X_train.shape)
+    print(X_test.shape)
+
+def train(str):
+    print("Training")
     global X_train
     global X_test
     global y_train
     global y_test
     
     if (X_train is None) or (X_test is None) or (y_train is None) or (y_test is None):
-        try:
-            X_train = np.load("X_train")
-            X_test = np.load("X_test")
-            y_train = np.load("y_train")
-            y_test = np.load("y_test")
-        except FileNotFoundError:
-            if not (X_train and X_test and y_train and y_test):
-                split()
+        exit()
+        # try:
+        #     X_train = np.load("X_train.npy")
+        #     X_test = np.load("X_test.npy")
+        #     y_train = np.load("y_train.npy")
+        #     y_test = np.load("y_test.npy")
+        # except FileNotFoundError:
+            # if not (X_train and X_test and y_train and y_test):
+            #     split()
+            # exit()
     
     scaler = StandardScaler()
     
@@ -59,25 +81,30 @@ def train():
 
     clf.fit(X_train, y_train)
     pickle.dump(clf, open("model", 'wb'))
+    pickle.dump(clf, open("model"+str, 'wb'))
+    print("Finish Training")
 
 def test():
+    print("Testing")
     global X_train
     global X_test
     global y_train
     global y_test
     
     if (X_train is None) or (X_test is None) or (y_train is None) or (y_test is None):
-        try:
-            X_train = np.load("X_train")
-            X_test = np.load("X_test")
-            y_train = np.load("y_train")
-            y_test = np.load("y_test")
-        except FileNotFoundError:
-            if not (X_train and X_test and y_train and y_test):
-                split()
-        if not (X_train != None and X_test != None and y_train != None and y_test != None):
-            print("X_train, X_test, y_train, and y_test do not exist")
-            exit()
+        exit()
+        # try:
+        #     X_train = np.load("X_train.npy")
+        #     X_test = np.load("X_test.npy")
+        #     y_train = np.load("y_train.npy")
+        #     y_test = np.load("y_test.npy")
+        # except FileNotFoundError:
+        #     # if not (X_train and X_test and y_train and y_test):
+        #     #     split()
+        #     exit()
+        # if not (X_train != None and X_test != None and y_train != None and y_test != None):
+        #     print("X_train, X_test, y_train, and y_test do not exist")
+        #     exit()
     
     clf = pickle.load(open("model", 'rb'))
     predictions = clf.predict(X_test)
@@ -85,15 +112,29 @@ def test():
     for i in range(len(predictions)):
         if predictions[i] == y_test[i]:
             sum += 1
-    print(sum/len(predictions))
+    print("Model Accuracy = {}".format(sum/len(predictions)))
+    return sum/len(predictions)
 
 if __name__ == "__main__":
-    if option == 1: # no extra arguments
-        print("test")
-        test()
-    else:
-        print("train and test")
-        train()
-        test()
+    # if option == 1: # no extra arguments
+    #     print("test")
+    #     test()
+    # else:
+    #     print("train and test")
+    #     train()
+    #     test()
+    f = open("RESULTS","w+")
+    load([0,1,2,3])
+    train("without-any-features")
+    result = test()
+    f.write("Nothing = " + str(result))
+    
+    for i in range(4):
+        include = []
+        include.append(i)
+        load(include)
+        train("without-feature-"+str(i))
+        result = test()
+        f.write("Without " + str(i) + " = " + str(result))
 
     print("done")
